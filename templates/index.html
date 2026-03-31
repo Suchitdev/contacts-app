@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contacts Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="sidebar">
+        <h2>📇 CRM</h2>
+        <a href="/">Dashboard</a>
+        <a href="/">Contacts</a>
+    </div>
+
+    <div class="main">
+
+        <div class="topbar">
+            <h2>Contacts Dashboard</h2>
+            <button id="toggle">🌙</button>
+        </div>
+
+        <div class="stats">
+            <div class="card">Total Contacts<br><b>{{ contacts|length }}</b></div>
+            <div class="card">Active Users<br><b>{{ contacts|length }}</b></div>
+            <div class="card">New Today<br><b>+3</b></div>
+        </div>
+
+        <div class="form-box">
+            <form action="/add" method="POST">
+                <input type="text" name="name" placeholder="Name" required>
+                <input type="text" name="phone" placeholder="Phone" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <button>Add Contact</button>
+            </form>
+        </div>
+
+        <div class="table-box">
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+
+                {% for c in contacts %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ c.name }}</td>
+                    <td>{{ c.phone }}</td>
+                    <td>{{ c.email }}</td>
+                    <td>
+                        <a href="/delete/{{ c.contact_id }}" class="delete">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+const toggle = document.getElementById("toggle");
+
+if(localStorage.getItem("mode") === "dark"){
+    document.body.classList.add("dark");
+    toggle.innerText = "☀️";
+}
+
+toggle.onclick = () => {
+    document.body.classList.toggle("dark");
+
+    if(document.body.classList.contains("dark")){
+        localStorage.setItem("mode", "dark");
+        toggle.innerText = "☀️";
+    } else {
+        localStorage.setItem("mode", "light");
+        toggle.innerText = "🌙";
+    }
+};
+</script>
+
+</body>
+</html>
